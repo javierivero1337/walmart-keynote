@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# open-slide workspace
 
-## Getting Started
+Slides as React components. Each slide lives under `slides/<id>/index.tsx` and default-exports an array of page components. The `@open-slide/core` runtime handles layout, scaling, navigation, thumbnails, and fullscreen play mode — you just write the pages.
 
-First, run the development server:
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open the dev server and edit `slides/getting-started/index.tsx`, or create a new slide at `slides/<your-slide>/index.tsx`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the dev server with hot reload. |
+| `pnpm build` | Build a static bundle you can deploy. |
+| `pnpm preview` | Preview the built bundle locally. |
 
-## Learn More
+## Authoring a slide
 
-To learn more about Next.js, take a look at the following resources:
+```tsx
+// slides/my-slide/index.tsx
+import type { Page, SlideMeta } from '@open-slide/core';
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+const Cover: Page = () => (
+  <div style={{ width: '100%', height: '100%' }}>Hello</div>
+);
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+export const meta: SlideMeta = { title: 'My slide' };
+export default [Cover] satisfies Page[];
+```
 
-## Deploy on Vercel
+Every page renders into a fixed **1920 × 1080** canvas — design with absolute pixel values. Put images, videos, and fonts under `slides/<id>/assets/` and import them directly.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See [`CLAUDE.md`](./CLAUDE.md) for the full authoring guide.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Navigation
+
+- Arrow keys / PageUp / PageDown move between pages.
+- `F` enters fullscreen play mode; Esc exits.
+- In play mode: Space / → next, ← prev.
+
+## Claude Code integration
+
+This workspace ships with Claude Code skills preconfigured under `.claude/skills/` and `.agents/skills/`. Ask Claude Code to "make slides about X" and the `create-slide` skill takes over. Use `apply-comments` to iterate via inspector-style markers inside your source.
+
+## Config
+
+Optional `open-slide.config.ts` at the workspace root:
+
+```ts
+import type { OpenSlideConfig } from '@open-slide/core';
+
+const openSlideConfig: OpenSlideConfig = {
+  port: 5173,
+};
+
+export default openSlideConfig;
+```
+
+Supported fields: `slidesDir`, `port`.

@@ -1,26 +1,489 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f8f3;
+  --foreground: #0a0f0c;
+  --pitch-black: #f7f8f3;
+  --panel-black: #ffffff;
+  --panel-raised: #f1f5ed;
+  --panel-max: #e5ebe2;
+  --neon-green: #00b86b;
+  --soft-green: #075f38;
+  --signal-cyan: #0077a3;
+  --warm-amber: #ad6b00;
+  --muted-grey: #66706a;
+  --soft-text: #29352f;
+  --brand-border: rgba(18, 23, 19, 0.12);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-pitch-black: var(--pitch-black);
+  --color-neon-green: var(--neon-green);
+  --color-muted-grey: var(--muted-grey);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-space-grotesk);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+  overflow: hidden; /* Hide scrollbars to preserve presentation view */
+  user-select: none; /* Avoid text selection highlight during transitions */
 }
+
+/* Custom CSS utilities for high-impact pitch deck slides */
+
+.bg-pastel-mesh {
+  background-color: var(--pitch-black);
+  background-image:
+    linear-gradient(rgba(18, 23, 19, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 23, 19, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 14% 12%, rgba(0, 184, 107, 0.12), transparent 34%),
+    radial-gradient(circle at 88% 84%, rgba(0, 119, 163, 0.1), transparent 36%),
+    radial-gradient(circle at 54% 108%, rgba(255, 184, 77, 0.12), transparent 30%);
+  background-size: 96px 96px, 96px 96px, auto, auto;
+}
+
+.bg-grid-dots {
+  background-image: radial-gradient(rgba(18, 23, 19, 0.055) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.bg-grid-dots-light {
+  background-image: radial-gradient(rgba(18, 23, 19, 0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(243, 247, 239, 0.82));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 28px 70px -46px rgba(18, 23, 19, 0.28), 0 1px 0 rgba(255, 255, 255, 0.75) inset;
+}
+
+.text-neon-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 135, 0.4), 0 0 20px rgba(0, 255, 135, 0.2);
+}
+
+.text-neon-glow-strong {
+  text-shadow: 0 0 15px rgba(0, 255, 135, 0.6), 0 0 30px rgba(0, 255, 135, 0.3);
+}
+
+.border-neon-glow {
+  border-color: rgba(0, 255, 135, 0.4) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 135, 0.15);
+}
+
+.border-neon-glow-strong {
+  border-color: rgba(0, 255, 135, 0.8) !important;
+  box-shadow: 0 0 25px rgba(0, 255, 135, 0.3);
+}
+
+/* Brand-kit application layer for existing slide utilities */
+.bg-pastel-mesh,
+.bg-pastel-mesh .text-black,
+.bg-pastel-mesh [class*="text-zinc-900"],
+.bg-pastel-mesh [class*="text-zinc-800"],
+.bg-pastel-mesh [class*="text-zinc-700"] {
+  color: var(--foreground) !important;
+}
+
+.bg-pastel-mesh [class*="text-zinc-600"],
+.bg-pastel-mesh [class*="text-zinc-500"],
+.bg-pastel-mesh [class*="text-zinc-400"] {
+  color: var(--soft-text) !important;
+}
+
+.bg-pastel-mesh [class*="text-indigo-"],
+.bg-pastel-mesh [class*="text-emerald-"] {
+  color: var(--soft-green) !important;
+}
+
+.bg-pastel-mesh [class*="bg-indigo-"],
+.bg-pastel-mesh [class*="bg-emerald-"] {
+  background-color: rgba(0, 184, 107, 0.14) !important;
+}
+
+.bg-pastel-mesh [class*="border-indigo-"],
+.bg-pastel-mesh [class*="border-emerald-"],
+.bg-pastel-mesh [class*="border-white"] {
+  border-color: rgba(0, 184, 107, 0.24) !important;
+}
+
+.bg-pastel-mesh [class*="bg-white"],
+.bg-pastel-mesh [class*="bg-black/5"] {
+  background-color: rgba(255, 255, 255, 0.86) !important;
+}
+
+.bg-pastel-mesh [class*="border-zinc-"],
+.bg-pastel-mesh [class*="border-black"] {
+  border-color: var(--brand-border) !important;
+}
+
+.bg-pastel-mesh .font-display {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+
+.bg-pastel-mesh h1,
+.bg-pastel-mesh h2,
+.bg-pastel-mesh h3 {
+  color: var(--foreground);
+}
+
+.bg-pastel-mesh h1 [class*="text-indigo-"],
+.bg-pastel-mesh h2 [class*="text-indigo-"],
+.bg-pastel-mesh h3 [class*="text-indigo-"] {
+  color: var(--soft-green) !important;
+}
+
+.bg-pastel-mesh input[type="range"] {
+  accent-color: var(--neon-green);
+}
+
+/* Hide scrollbar for elements while retaining scrolling ability */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glow breathing keyframe */
+@keyframes glowBreathe {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.08);
+  }
+}
+
+.animate-glow-breathe {
+  animation: glowBreathe 8s ease-in-out infinite;
+}
+
+@keyframes autoplayProgress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-autoplay-progress {
+  animation-name: autoplayProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideEnter {
+  from {
+    opacity: 0;
+    transform: translateX(4%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-slide-enter {
+  animation: slideEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes chartReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-chart-reveal {
+  animation: chartReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes velocityBarGrow {
+  from {
+    opacity: 0.4;
+    transform: scaleY(0.06);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.animate-velocity-bar {
+  transform-origin: bottom;
+  animation: velocityBarGrow 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  33% {
+    transform: translate3d(12px, -18px, 0);
+  }
+  66% {
+    transform: translate3d(-14px, 12px, 0);
+  }
+}
+
+@keyframes logoFloatAlt {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40% {
+    transform: translate3d(-14px, -16px, 0);
+  }
+  70% {
+    transform: translate3d(16px, 10px, 0);
+  }
+}
+
+.animate-logo-float {
+  animation: logoFloat var(--float-duration, 9s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+  will-change: transform;
+}
+
+.animate-logo-float-alt {
+  animation: logoFloatAlt var(--float-duration, 11s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+  will-change: transform;
+}
+
+@keyframes markerHighlight {
+  from {
+    clip-path: inset(0 100% 0 0 round 3px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 3px);
+  }
+}
+
+.animate-marker-highlight {
+  animation: markerHighlight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+  will-change: clip-path;
+}
+
+@keyframes stackWordFlip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+.animate-stack-word-flip {
+  transform-style: preserve-3d;
+  animation: stackWordFlip 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+@keyframes humanPanelReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.animate-human-panel-reveal {
+  animation: humanPanelReveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: clip-path, opacity, transform;
+}
+
+@keyframes habilidadesReveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+    letter-spacing: 0.08em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.22em;
+  }
+}
+
+.animate-habilidades-reveal {
+  animation: habilidadesReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform, letter-spacing;
+}
+
+/* Custom transitions */
+.transition-all-custom {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Theatrical main-actor word reveal with integrated permanent glowing states */
+@keyframes wordRevealCuriosity {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+    transform: scale(0.95) translateY(30px);
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1) translateY(0);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+  }
+}
+
+.animate-word-reveal-curiosity {
+  animation: wordRevealCuriosity 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes wordRevealInitiative {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+    transform: scale(0.95) translateY(30px);
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1) translateY(0);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+  }
+}
+
+.animate-word-reveal-initiative {
+  animation: wordRevealInitiative 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes wordRevealOptimism {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+    transform: scale(0.95) translateY(30px);
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1) translateY(0);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+  }
+}
+
+.animate-word-reveal-optimism {
+  animation: wordRevealOptimism 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.animate-subtitle-fade-in {
+  animation: subtitleFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Drifting animated background glow behind titles */
+@keyframes glowMove {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(35px, -20px) scale(1.15);
+  }
+  66% {
+    transform: translate(-25px, 20px) scale(0.92);
+  }
+}
+
+.animate-glow-move {
+  animation: glowMove 14s ease-in-out infinite;
+}
+
+@keyframes coverGlowDrift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(280px, -100px) scale(1.14);
+  }
+  45% {
+    transform: translate(380px, 160px) scale(0.9);
+  }
+  70% {
+    transform: translate(-160px, 220px) scale(1.08);
+  }
+  85% {
+    transform: translate(-260px, -60px) scale(1.04);
+  }
+}
+
+.animate-cover-glow-drift {
+  animation: coverGlowDrift 14s ease-in-out infinite;
+}
+
+@keyframes coverBorderSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-cover-border-spin {
+  animation: coverBorderSpin 5.5s linear infinite;
+}
+
+.animate-cover-border-spin-reverse {
+  animation: coverBorderSpin 8s linear infinite reverse;
+}
+
