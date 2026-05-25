@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { SLIDES_CONFIG, SLIDE_IMAGE_URLS, type SlideConfig } from "@/lib/slides-config";
+import { SLIDES_CONFIG, type SlideConfig } from "@/lib/slides-config";
+import { preloadDeckImages } from "@/lib/preload-deck-images";
 import { SLIDE_COMPONENTS } from "@/components/slides";
 import { CURVE_MILESTONE_COUNT, VELOCITY_COMPANY_COUNT } from "@/components/slides/HumanStackSlides";
 
@@ -206,22 +207,8 @@ export default function SlideDeck() {
   }, [changeSlide, current, currentSlide.id, isStackTransitionPending, slides.length]);
 
   useEffect(() => {
-    const nextIndex = (current + 1) % slides.length;
-    const nextSlideId = slides[nextIndex].id;
-    const imageUrl = SLIDE_IMAGE_URLS[nextSlideId];
-
-    if (!imageUrl) return;
-
-    const link = document.createElement("link");
-    link.rel = "prefetch";
-    link.as = "image";
-    link.href = imageUrl;
-    document.head.appendChild(link);
-
-    return () => {
-      link.remove();
-    };
-  }, [current, slides]);
+    preloadDeckImages();
+  }, []);
 
   const isSeamlessSlideTransition = useMemo(() => {
     if (!previousSlideId) return false;

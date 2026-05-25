@@ -173,16 +173,17 @@ export const SLIDES_CONFIG: SlideConfig[] = [
   },
 ];
 
-/** Imágenes usadas por diapositiva: precarga la siguiente diapositiva para transiciones más fluidas. */
-export const SLIDE_IMAGE_URLS: Record<string, string | undefined> = {
-  slide_3_catalyst: "/assets/curva.png",
-  slide_4_curve_intro: "/assets/curva.png",
-  slide_6_entrena_intro: "/assets/entrena.png",
-  slide_4_futuro: "/assets/futuro.png",
-  slide_2_intro: "/assets/Javier.webp",
-  slide_7_trap: "/assets/falsostack.png",
-  slide_8_pivot: "/assets/verdadero.png",
-  slide_9_curiosity: "/assets/curiosidad.png",
-  slide_10_initiative: "/assets/iniciativa.png",
-  slide_11_optimism: "/assets/optimismo.png",
-};
+/** Static deck images preloaded when the site first loads. */
+export const DECK_IMAGE_URLS = [
+  "/assets/cover.png",
+  "/assets/collective-logo-white.png",
+  "/assets/Javier.webp",
+  "/assets/curva.png",
+  "/assets/futuro.png",
+  "/assets/entrena.png",
+  "/assets/falsostack.png",
+  "/assets/verdadero.png",
+  "/assets/curiosidad.png",
+  "/assets/iniciativa.png",
+  "/assets/optimismo.png",
+] as const;
