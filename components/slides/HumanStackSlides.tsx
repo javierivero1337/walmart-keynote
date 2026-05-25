@@ -162,8 +162,8 @@ interface MilestoneData {
   label: string;
   headline: string;
   description: string;
-  keyModels: string[];
-  capabilities: string[];
+  keyModels: readonly string[];
+  capabilities: readonly string[];
   impact: string;
   rx: number;
   ry: number;
@@ -819,17 +819,17 @@ function AgentDomainsChart() {
                         style={{
                           width: `${barWidth}%`,
                           transformOrigin: "left center",
-                          background: domain.highlight
+                          background: "highlight" in domain && domain.highlight
                             ? "linear-gradient(90deg, #00b86b, rgba(0,184,107,0.45))"
                             : "linear-gradient(90deg, rgba(247,248,243,0.34), rgba(247,248,243,0.12))",
-                          boxShadow: domain.highlight ? "0 0 28px rgba(0,184,107,0.22)" : undefined,
+                          boxShadow: "highlight" in domain && domain.highlight ? "0 0 28px rgba(0,184,107,0.22)" : undefined,
                         }}
                       />
                     </div>
 
                     <p
                       className={`text-right font-display text-[1.05rem] font-semibold tracking-[-0.04em] ${
-                        domain.highlight ? "text-[#00b86b]" : "text-white/72"
+                        "highlight" in domain && domain.highlight ? "text-[#00b86b]" : "text-white/72"
                       }`}
                     >
                       {domain.value.toFixed(1)}%

@@ -98,23 +98,14 @@ const TERMINAL_CARDS = [
   },
 ] as const;
 
-const MOCK_LOG_LINES = [
-  (ms: number) => `[METRIC] Latency optimized to ${ms}ms.`,
-  (hex: string) => `[AGENT] Synchronized neural vectors with nodes: [0x${hex}].`,
-  () => `[ROUTING] Re-balancing incoming streams to prevent ingestion bottleneck...`,
-  () => `[SECURITY] Completed edge validation. Safe handshakes verified.`,
-  () => `[MEMORY] Context window check: 99.98% recall index across active cluster.`,
-  (loss: string) => `[MODEL] Compiling active gradient weights. Matrix loss factor: ${loss}.`,
-];
-
 function pickRandomLog(): string {
   const mockLogLines = [
-    MOCK_LOG_LINES[0](Math.floor(Math.random() * 5) + 1),
-    MOCK_LOG_LINES[1](Math.floor(Math.random() * 1000).toString(16).toUpperCase()),
-    MOCK_LOG_LINES[2](),
-    MOCK_LOG_LINES[3](),
-    MOCK_LOG_LINES[4](),
-    MOCK_LOG_LINES[5](`0.00${Math.floor(Math.random() * 9) + 1}`),
+    `[METRIC] Latency optimized to ${Math.floor(Math.random() * 5) + 1}ms.`,
+    `[AGENT] Synchronized neural vectors with nodes: [0x${Math.floor(Math.random() * 1000).toString(16).toUpperCase()}].`,
+    `[ROUTING] Re-balancing incoming streams to prevent ingestion bottleneck...`,
+    `[SECURITY] Completed edge validation. Safe handshakes verified.`,
+    `[MEMORY] Context window check: 99.98% recall index across active cluster.`,
+    `[MODEL] Compiling active gradient weights. Matrix loss factor: 0.00${Math.floor(Math.random() * 9) + 1}.`,
   ];
   return mockLogLines[Math.floor(Math.random() * mockLogLines.length)];
 }
