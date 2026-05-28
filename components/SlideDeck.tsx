@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { SLIDES_CONFIG, type SlideConfig } from "@/lib/slides-config";
 import { preloadDeckImages } from "@/lib/preload-deck-images";
 import { SLIDE_COMPONENTS } from "@/components/slides";
-import { CURVE_MILESTONE_COUNT, VELOCITY_COMPANY_COUNT } from "@/components/slides/HumanStackSlides";
+import { CURVE_MILESTONE_COUNT, MUSK_ALGORITHM_STEP_COUNT, VELOCITY_COMPANY_COUNT } from "@/components/slides/HumanStackSlides";
 
 const AUTOPLAY_DURATION = 8000;
 const STACK_WORD_TRANSITION_DURATION = 1200;
@@ -26,12 +26,14 @@ export default function SlideDeck() {
   const [isGridOpen, setIsGridOpen] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
   const [isAutoplay, setIsAutoplay] = useState(false);
+  const [isFalsoStackTitleRevealed, setIsFalsoStackTitleRevealed] = useState(false);
   const [isStackTransitionPending, setIsStackTransitionPending] = useState(false);
   const [isSynthesisSubtextVisible, setIsSynthesisSubtextVisible] = useState(false);
   const [isAlphaZeroRevealed, setIsAlphaZeroRevealed] = useState(false);
   const [isOutroCollapsed, setIsOutroCollapsed] = useState(false);
   const [curveMilestoneIndex, setCurveMilestoneIndex] = useState(0);
   const [velocityCompanyIndex, setVelocityCompanyIndex] = useState(0);
+  const [muskStepIndex, setMuskStepIndex] = useState(0);
   const [previousSlideId, setPreviousSlideId] = useState<string | null>(null);
 
   const deckRef = useRef<HTMLDivElement>(null);
@@ -42,12 +44,14 @@ export default function SlideDeck() {
   const changeSlide = useCallback(
     (nextIndex: number) => {
       setPreviousSlideId(currentSlide.id);
+      setIsFalsoStackTitleRevealed(false);
       setIsStackTransitionPending(false);
       setIsSynthesisSubtextVisible(false);
       setIsAlphaZeroRevealed(false);
       setIsOutroCollapsed(false);
       setCurveMilestoneIndex(0);
       setVelocityCompanyIndex(0);
+      setMuskStepIndex(0);
       setCurrent(nextIndex);
       setIsGridOpen(false);
     },
@@ -61,6 +65,11 @@ export default function SlideDeck() {
     }
 
     if (currentSlide.id === "slide_7_trap") {
+      if (!isFalsoStackTitleRevealed) {
+        setIsFalsoStackTitleRevealed(true);
+        return;
+      }
+
       if (isStackTransitionPending) return;
 
       setIsStackTransitionPending(true);
@@ -87,8 +96,13 @@ export default function SlideDeck() {
       return;
     }
 
+    if (currentSlide.id === "slide_5_musk_algorithm" && muskStepIndex < MUSK_ALGORITHM_STEP_COUNT) {
+      setMuskStepIndex((index) => index + 1);
+      return;
+    }
+
     changeSlide(current < slides.length - 1 ? current + 1 : 0);
-  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isAlphaZeroRevealed, isStackTransitionPending, isSynthesisSubtextVisible, isOutroCollapsed, slides.length, velocityCompanyIndex]);
+  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isAlphaZeroRevealed, isFalsoStackTitleRevealed, isStackTransitionPending, isSynthesisSubtextVisible, isOutroCollapsed, muskStepIndex, slides.length, velocityCompanyIndex]);
 
   const prevSlide = useCallback(() => {
     if (currentSlide.id === "slide_13_outro" && isOutroCollapsed) {
@@ -106,8 +120,25 @@ export default function SlideDeck() {
       return;
     }
 
+    if (currentSlide.id === "slide_5_musk_algorithm" && muskStepIndex > 0) {
+      setMuskStepIndex((index) => index - 1);
+      return;
+    }
+
+    if (currentSlide.id === "slide_7_trap") {
+      if (isStackTransitionPending) {
+        setIsStackTransitionPending(false);
+        return;
+      }
+
+      if (isFalsoStackTitleRevealed) {
+        setIsFalsoStackTitleRevealed(false);
+        return;
+      }
+    }
+
     changeSlide(current > 0 ? current - 1 : slides.length - 1);
-  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isOutroCollapsed, slides.length, velocityCompanyIndex]);
+  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isFalsoStackTitleRevealed, isOutroCollapsed, isStackTransitionPending, muskStepIndex, slides.length, velocityCompanyIndex]);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -282,6 +313,9 @@ export default function SlideDeck() {
             >
               {ActiveSlide ? (
                 <ActiveSlide
+                  isFalsoStackTitleRevealed={
+                    currentSlide.id === "slide_7_trap" && isFalsoStackTitleRevealed
+                  }
                   isStackTransitioning={currentSlide.id === "slide_7_trap" && isStackTransitionPending}
                   isSynthesisSubtextVisible={
                     currentSlide.id === "slide_12_synthesis" && isSynthesisSubtextVisible
@@ -298,6 +332,9 @@ export default function SlideDeck() {
                     currentSlide.id === "slide_5_velocity" ? velocityCompanyIndex : undefined
                   }
                   onSelectVelocityCompany={setVelocityCompanyIndex}
+                  muskStepIndex={
+                    currentSlide.id === "slide_5_musk_algorithm" ? muskStepIndex : undefined
+                  }
                   isOutroCollapsed={
                     currentSlide.id === "slide_13_outro" && isOutroCollapsed
                   }

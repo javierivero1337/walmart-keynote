@@ -8,6 +8,7 @@ import {
   Slide4Futuro,
   Slide4AgentDomains,
   Slide5Velocity,
+  Slide5MuskAlgorithm,
   Slide6EntrenaIntro,
   Slide6Paradox,
   Slide7Trap,
@@ -20,6 +21,7 @@ import {
 } from "./HumanStackSlides";
 
 export interface SlideRuntimeProps {
+  isFalsoStackTitleRevealed?: boolean;
   isStackTransitioning?: boolean;
   isSynthesisSubtextVisible?: boolean;
   onRevealSynthesisSubtext?: () => void;
@@ -28,6 +30,7 @@ export interface SlideRuntimeProps {
   curveMilestoneIndex?: number;
   velocityCompanyIndex?: number;
   onSelectVelocityCompany?: (index: number) => void;
+  muskStepIndex?: number;
   isOutroCollapsed?: boolean;
 }
 
@@ -40,6 +43,7 @@ export const SLIDE_COMPONENTS: Record<string, ComponentType<SlideRuntimeProps>> 
   slide_4_futuro: Slide4Futuro,
   slide_4_agent_domains: Slide4AgentDomains,
   slide_5_velocity: Slide5Velocity,
+  slide_5_musk_algorithm: Slide5MuskAlgorithm,
   slide_6_entrena_intro: Slide6EntrenaIntro,
   slide_6_paradox: Slide6Paradox,
   slide_7_trap: Slide7Trap,
@@ -60,6 +64,7 @@ export {
   Slide4Futuro,
   Slide4AgentDomains,
   Slide5Velocity,
+  Slide5MuskAlgorithm,
   Slide6EntrenaIntro,
   Slide6Paradox,
   Slide7Trap,

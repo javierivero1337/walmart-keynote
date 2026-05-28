@@ -105,12 +105,25 @@ export const SLIDES_CONFIG: SlideConfig[] = [
     ],
   },
   {
+    id: "slide_5_musk_algorithm",
+    title: "El algoritmo de Musk",
+    subtitle: "Sección 05",
+    notes: [
+      "Cada clic revela un paso del algoritmo de Musk, en orden estricto.",
+      "Paso 1: cuestiona los requisitos. Paso 2: elimina lo innecesario. Paso 3: simplifica u optimiza.",
+      "Paso 4: acelera el ciclo. Paso 5: automatiza al final — solo cuando lo anterior ya está resuelto.",
+      "Conecta con la realidad exponencial: en un mundo que acelera, este marco evita optimizar lo que no debería existir.",
+    ],
+  },
+  {
     id: "slide_7_trap",
     title: "El falso stack",
     subtitle: "Sección 07",
     notes: [
+      "Al entrar, solo aparecen los logos flotando; el primer clic revela el título «El falso stack».",
       "Muestra el mercado ruidoso de herramientas, proveedores y flujos de trabajo.",
       "El punto no es que las herramientas no importen. El punto es que el pánico por herramientas es el centro de gravedad equivocado.",
+      "Segundo clic: el título pasa a «verdadero» y avanza a la diapositiva siguiente.",
       "Aterriza en la idea central del 'falso stack': ¿en qué deben convertirse los humanos cuando el stack sigue cambiando?",
     ],
   },

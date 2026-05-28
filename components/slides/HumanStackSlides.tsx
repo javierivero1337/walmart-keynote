@@ -1261,6 +1261,79 @@ export function Slide6EntrenaIntro() {
   );
 }
 
+const muskAlgorithmSteps = [
+  "Cuestiona los requisitos.",
+  "Elimina lo innecesario.",
+  "Simplifica u optimiza.",
+  "Acelera el ciclo.",
+  "Automatiza al final.",
+] as const;
+
+export const MUSK_ALGORITHM_STEP_COUNT = muskAlgorithmSteps.length;
+
+export function Slide5MuskAlgorithm({ muskStepIndex = 0 }: { muskStepIndex?: number }) {
+  const revealedCount = muskStepIndex;
+
+  return (
+    <SlideFrame atmosphere="flat" className="!bg-[#181a1e]">
+      <div className="grid h-full min-h-0 grid-rows-[auto_1fr] gap-10">
+        <div className="flex items-end justify-between gap-10">
+          <h2 className="text-[3.9rem] font-display font-semibold leading-none tracking-[-0.075em]">
+            El algoritmo de Musk.
+          </h2>
+          <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-white/28">
+            {String(revealedCount).padStart(2, "0")} / {String(MUSK_ALGORITHM_STEP_COUNT).padStart(2, "0")}
+          </p>
+        </div>
+
+        <ol className="flex min-h-0 flex-1 flex-col justify-center gap-5">
+          {muskAlgorithmSteps.map((step, index) => {
+            const isVisible = index < revealedCount;
+            const isLatest = index === revealedCount - 1;
+
+            return (
+              <li key={step} className="relative">
+                <motion.div
+                  initial={false}
+                  animate={
+                    isVisible
+                      ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                      : { opacity: 0, y: 18, filter: "blur(6px)" }
+                  }
+                  transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                  className={`flex items-baseline gap-6 rounded-[1.75rem] border px-8 py-6 transition-colors duration-500 ${
+                    isVisible
+                      ? isLatest
+                        ? "border-[#00b86b]/45 bg-[#00b86b]/10"
+                        : "border-white/10 bg-white/[0.04]"
+                      : "pointer-events-none border-transparent bg-transparent"
+                  }`}
+                  aria-hidden={!isVisible}
+                >
+                  <span
+                    className={`font-mono text-[1.35rem] font-bold tracking-[0.12em] transition-colors duration-500 ${
+                      isVisible ? (isLatest ? "text-[#00ff87]" : "text-white/35") : "text-transparent"
+                    }`}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <p
+                    className={`text-[2.65rem] font-display font-semibold leading-none tracking-[-0.04em] transition-colors duration-500 ${
+                      isVisible ? "text-white" : "text-transparent"
+                    }`}
+                  >
+                    {step}
+                  </p>
+                </motion.div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </SlideFrame>
+  );
+}
+
 export function Slide5Velocity({
   velocityCompanyIndex = 0,
   onSelectVelocityCompany,
@@ -1527,23 +1600,30 @@ export function Slide6Paradox({ isAlphaZeroRevealed = false, onRevealAlphaZero }
 }
 
 interface StackTransitionSlideProps {
+  isFalsoStackTitleRevealed?: boolean;
   isStackTransitioning?: boolean;
 }
 
 const STACK_TITLE_EASE = [0.16, 1, 0.3, 1] as const;
 
 export function Slide7Trap({
+  isFalsoStackTitleRevealed = false,
   isStackTransitioning = false,
 }: StackTransitionSlideProps = {}) {
   const [markerActive, setMarkerActive] = useState(false);
 
   useEffect(() => {
+    if (!isFalsoStackTitleRevealed) {
+      setMarkerActive(false);
+      return;
+    }
+
     const markerTimer = window.setTimeout(() => setMarkerActive(true), 1050);
 
     return () => {
       window.clearTimeout(markerTimer);
     };
-  }, []);
+  }, [isFalsoStackTitleRevealed]);
 
   type LogoCloudItem = {
     Icon: ComponentType<SVGProps<SVGSVGElement>>;
@@ -1666,56 +1746,58 @@ export function Slide7Trap({
             ))}
           </div>
 
-          <div className="relative z-10 flex items-center justify-center px-8">
-            <h2 className="flex items-baseline gap-[0.18em] text-[8.5rem] font-display font-semibold leading-[0.9] tracking-[-0.075em] text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.65)]">
-              <motion.span
-                initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ ...titleWordTransition, delay: 0.42 }}
-              >
-                El
-              </motion.span>
-              <span
-                className="relative inline-flex justify-center overflow-hidden whitespace-nowrap transition-[width] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-                style={{ width: isStackTransitioning ? "4.75em" : "2.45em" }}
-              >
-                <StackTitleMarker active={markerActive} />
-                {isStackTransitioning ? (
-                  <RotatingText
-                    texts={["verdadero"]}
-                    auto={false}
-                    loop={false}
-                    splitBy="characters"
-                    staggerDuration={0.014}
-                    staggerFrom="center"
-                    mainClassName="relative inline-flex justify-center overflow-hidden"
-                    splitLevelClassName="inline-flex"
-                    elementLevelClassName="will-change-transform"
-                    transition={{ type: "spring", damping: 28, stiffness: 320, mass: 0.45 }}
-                    initial={{ y: "78%", opacity: 0, filter: "blur(8px)" }}
-                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                    exit={{ y: "-78%", opacity: 0, filter: "blur(8px)" }}
-                  />
-                ) : (
-                  <motion.span
-                    className="relative"
-                    initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ ...titleWordTransition, delay: 0.62 }}
-                  >
-                    falso
-                  </motion.span>
-                )}
-              </span>
-              <motion.span
-                initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ ...titleWordTransition, delay: 0.82 }}
-              >
-                stack
-              </motion.span>
-            </h2>
-          </div>
+          {isFalsoStackTitleRevealed ? (
+            <div className="relative z-10 flex items-center justify-center px-8">
+              <h2 className="flex items-baseline gap-[0.18em] text-[8.5rem] font-display font-semibold leading-[0.9] tracking-[-0.075em] text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.65)]">
+                <motion.span
+                  initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ ...titleWordTransition, delay: 0.08 }}
+                >
+                  El
+                </motion.span>
+                <span
+                  className="relative inline-flex justify-center overflow-hidden whitespace-nowrap transition-[width] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  style={{ width: isStackTransitioning ? "4.75em" : "2.45em" }}
+                >
+                  <StackTitleMarker active={markerActive} />
+                  {isStackTransitioning ? (
+                    <RotatingText
+                      texts={["verdadero"]}
+                      auto={false}
+                      loop={false}
+                      splitBy="characters"
+                      staggerDuration={0.014}
+                      staggerFrom="center"
+                      mainClassName="relative inline-flex justify-center overflow-hidden"
+                      splitLevelClassName="inline-flex"
+                      elementLevelClassName="will-change-transform"
+                      transition={{ type: "spring", damping: 28, stiffness: 320, mass: 0.45 }}
+                      initial={{ y: "78%", opacity: 0, filter: "blur(8px)" }}
+                      animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                      exit={{ y: "-78%", opacity: 0, filter: "blur(8px)" }}
+                    />
+                  ) : (
+                    <motion.span
+                      className="relative"
+                      initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{ ...titleWordTransition, delay: 0.28 }}
+                    >
+                      falso
+                    </motion.span>
+                  )}
+                </span>
+                <motion.span
+                  initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ ...titleWordTransition, delay: 0.48 }}
+                >
+                  stack
+                </motion.span>
+              </h2>
+            </div>
+          ) : null}
         </div>
       </div>
     </SlideFrame>
