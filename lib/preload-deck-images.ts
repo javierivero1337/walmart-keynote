@@ -7,10 +7,10 @@ const PRELOAD_QUALITY = 100;
 
 const preloaded = new Set<string>();
 
-export function preloadDeckImages() {
+export function preloadDeckImages(imageUrls: readonly string[] = DECK_IMAGE_URLS) {
   if (typeof document === "undefined") return;
 
-  for (const src of DECK_IMAGE_URLS) {
+  for (const src of imageUrls) {
     if (preloaded.has(src)) continue;
     preloaded.add(src);
 

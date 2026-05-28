@@ -21,6 +21,10 @@ import {
 } from "./HumanStackSlides";
 
 export interface SlideRuntimeProps {
+  hideCollectiveLogo?: boolean;
+  coverWebsiteLabel?: string;
+  coverTitleLine1?: string;
+  coverTitleLine2?: string;
   isFalsoStackTitleRevealed?: boolean;
   isStackTransitioning?: boolean;
   isSynthesisSubtextVisible?: boolean;
@@ -32,6 +36,8 @@ export interface SlideRuntimeProps {
   onSelectVelocityCompany?: (index: number) => void;
   muskStepIndex?: number;
   isOutroCollapsed?: boolean;
+  enableHumanSkillBulletReveal?: boolean;
+  isHumanSkillBulletsRevealed?: boolean;
 }
 
 export const SLIDE_COMPONENTS: Record<string, ComponentType<SlideRuntimeProps>> = {

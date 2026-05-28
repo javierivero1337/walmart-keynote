@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { SLIDES_CONFIG, type SlideConfig } from "@/lib/slides-config";
+import { DECK_IMAGE_URLS, SLIDES_CONFIG, type SlideConfig } from "@/lib/slides-config";
 import { preloadDeckImages } from "@/lib/preload-deck-images";
-import { SLIDE_COMPONENTS } from "@/components/slides";
+import { SLIDE_COMPONENTS, type SlideRuntimeProps } from "@/components/slides";
 import { CURVE_MILESTONE_COUNT, MUSK_ALGORITHM_STEP_COUNT, VELOCITY_COMPANY_COUNT } from "@/components/slides/HumanStackSlides";
 
 const AUTOPLAY_DURATION = 8000;
@@ -19,13 +19,34 @@ const SEAMLESS_TRANSITION_PAIRS: ReadonlyArray<readonly [string, string]> = [
 ];
 
 const SLIDES_WITH_INTERNAL_ENTER = new Set(["slide_4_curve_intro", "slide_6_entrena_intro", "slide_7_trap"]);
+const HUMAN_SKILL_SLIDE_IDS = new Set(["slide_9_curiosity", "slide_10_initiative", "slide_11_optimism"]);
 
-export default function SlideDeck() {
-  const slides = SLIDES_CONFIG;
+interface SlideDeckProps {
+  slideConfigs?: SlideConfig[];
+  slideComponents?: typeof SLIDE_COMPONENTS;
+  imageUrls?: readonly string[];
+  topCenterLabel?: string;
+  topCenterLabelInvertedSlideIds?: readonly string[];
+  topCenterLabelHiddenSlideIds?: readonly string[];
+  topCenterLabelRightSlideIds?: readonly string[];
+  slideRuntimeProps?: Partial<SlideRuntimeProps>;
+}
+
+export default function SlideDeck({
+  slideConfigs = SLIDES_CONFIG,
+  slideComponents = SLIDE_COMPONENTS,
+  imageUrls = DECK_IMAGE_URLS,
+  topCenterLabel,
+  topCenterLabelInvertedSlideIds = [],
+  topCenterLabelHiddenSlideIds = [],
+  topCenterLabelRightSlideIds = [],
+  slideRuntimeProps,
+}: SlideDeckProps = {}) {
+  const slides = slideConfigs;
   const [current, setCurrent] = useState(0);
   const [isGridOpen, setIsGridOpen] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
-  const [isAutoplay, setIsAutoplay] = useState(false);
+  const isAutoplay = false;
   const [isFalsoStackTitleRevealed, setIsFalsoStackTitleRevealed] = useState(false);
   const [isStackTransitionPending, setIsStackTransitionPending] = useState(false);
   const [isSynthesisSubtextVisible, setIsSynthesisSubtextVisible] = useState(false);
@@ -34,12 +55,13 @@ export default function SlideDeck() {
   const [curveMilestoneIndex, setCurveMilestoneIndex] = useState(0);
   const [velocityCompanyIndex, setVelocityCompanyIndex] = useState(0);
   const [muskStepIndex, setMuskStepIndex] = useState(0);
+  const [isHumanSkillBulletsRevealed, setIsHumanSkillBulletsRevealed] = useState(false);
   const [previousSlideId, setPreviousSlideId] = useState<string | null>(null);
 
   const deckRef = useRef<HTMLDivElement>(null);
 
   const currentSlide = slides[current];
-  const ActiveSlide = SLIDE_COMPONENTS[currentSlide.id];
+  const ActiveSlide = slideComponents[currentSlide.id];
 
   const changeSlide = useCallback(
     (nextIndex: number) => {
@@ -52,6 +74,7 @@ export default function SlideDeck() {
       setCurveMilestoneIndex(0);
       setVelocityCompanyIndex(0);
       setMuskStepIndex(0);
+      setIsHumanSkillBulletsRevealed(false);
       setCurrent(nextIndex);
       setIsGridOpen(false);
     },
@@ -81,6 +104,15 @@ export default function SlideDeck() {
       return;
     }
 
+    if (
+      slideRuntimeProps?.enableHumanSkillBulletReveal &&
+      HUMAN_SKILL_SLIDE_IDS.has(currentSlide.id) &&
+      !isHumanSkillBulletsRevealed
+    ) {
+      setIsHumanSkillBulletsRevealed(true);
+      return;
+    }
+
     if (currentSlide.id === "slide_13_outro" && !isOutroCollapsed) {
       setIsOutroCollapsed(true);
       return;
@@ -102,11 +134,20 @@ export default function SlideDeck() {
     }
 
     changeSlide(current < slides.length - 1 ? current + 1 : 0);
-  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isAlphaZeroRevealed, isFalsoStackTitleRevealed, isStackTransitionPending, isSynthesisSubtextVisible, isOutroCollapsed, muskStepIndex, slides.length, velocityCompanyIndex]);
+  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isAlphaZeroRevealed, isFalsoStackTitleRevealed, isHumanSkillBulletsRevealed, isStackTransitionPending, isSynthesisSubtextVisible, isOutroCollapsed, muskStepIndex, slideRuntimeProps?.enableHumanSkillBulletReveal, slides.length, velocityCompanyIndex]);
 
   const prevSlide = useCallback(() => {
     if (currentSlide.id === "slide_13_outro" && isOutroCollapsed) {
       setIsOutroCollapsed(false);
+      return;
+    }
+
+    if (
+      slideRuntimeProps?.enableHumanSkillBulletReveal &&
+      HUMAN_SKILL_SLIDE_IDS.has(currentSlide.id) &&
+      isHumanSkillBulletsRevealed
+    ) {
+      setIsHumanSkillBulletsRevealed(false);
       return;
     }
 
@@ -138,7 +179,7 @@ export default function SlideDeck() {
     }
 
     changeSlide(current > 0 ? current - 1 : slides.length - 1);
-  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isFalsoStackTitleRevealed, isOutroCollapsed, isStackTransitionPending, muskStepIndex, slides.length, velocityCompanyIndex]);
+  }, [changeSlide, current, currentSlide.id, curveMilestoneIndex, isFalsoStackTitleRevealed, isHumanSkillBulletsRevealed, isOutroCollapsed, isStackTransitionPending, muskStepIndex, slideRuntimeProps?.enableHumanSkillBulletReveal, slides.length, velocityCompanyIndex]);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -159,10 +200,6 @@ export default function SlideDeck() {
     } else {
       document.exitFullscreen();
     }
-  }, []);
-
-  const toggleAutoplay = useCallback(() => {
-    setIsAutoplay((prev) => !prev);
   }, []);
 
   const handleAutoplayEnd = useCallback(() => {
@@ -238,8 +275,8 @@ export default function SlideDeck() {
   }, [changeSlide, current, currentSlide.id, isStackTransitionPending, slides.length]);
 
   useEffect(() => {
-    preloadDeckImages();
-  }, []);
+    preloadDeckImages(imageUrls);
+  }, [imageUrls]);
 
   const isSeamlessSlideTransition = useMemo(() => {
     if (!previousSlideId) return false;
@@ -261,6 +298,15 @@ export default function SlideDeck() {
     () => `${((current + 1) / slides.length) * 100}%`,
     [current, slides.length]
   );
+  const isTopCenterLabelInverted = topCenterLabelInvertedSlideIds.includes(currentSlide.id);
+  const isTopCenterLabelHidden = topCenterLabelHiddenSlideIds.includes(currentSlide.id);
+  const isTopCenterLabelRight = topCenterLabelRightSlideIds.includes(currentSlide.id);
+  const topCenterLabelPositionClassName = isTopCenterLabelRight
+    ? "right-14 top-10"
+    : "left-1/2 top-6 -translate-x-1/2";
+  const topCenterLabelClassName = isTopCenterLabelInverted
+    ? "border-white/20 bg-[#0a0f0c]/70 text-[#f7f8f3] shadow-[0_10px_32px_rgba(0,0,0,0.35)]"
+    : "border-black/10 bg-[#f7f8f3]/80 text-[#0a0f0c] shadow-[0_10px_32px_rgba(10,15,12,0.16)]";
 
   return (
     <div
@@ -282,6 +328,15 @@ export default function SlideDeck() {
           />
         )}
       </div>
+
+      {topCenterLabel && !isTopCenterLabelHidden ? (
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute z-40 rounded-full border px-5 py-2 font-mono text-[0.85rem] font-bold uppercase tracking-[0.24em] backdrop-blur-md transition-colors duration-500 ${topCenterLabelPositionClassName} ${topCenterLabelClassName}`}
+        >
+          {topCenterLabel}
+        </div>
+      ) : null}
 
       <div className="flex w-full h-full min-h-0 relative">
         <div
@@ -313,6 +368,7 @@ export default function SlideDeck() {
             >
               {ActiveSlide ? (
                 <ActiveSlide
+                  {...slideRuntimeProps}
                   isFalsoStackTitleRevealed={
                     currentSlide.id === "slide_7_trap" && isFalsoStackTitleRevealed
                   }
@@ -337,6 +393,9 @@ export default function SlideDeck() {
                   }
                   isOutroCollapsed={
                     currentSlide.id === "slide_13_outro" && isOutroCollapsed
+                  }
+                  isHumanSkillBulletsRevealed={
+                    HUMAN_SKILL_SLIDE_IDS.has(currentSlide.id) && isHumanSkillBulletsRevealed
                   }
                 />
               ) : null}

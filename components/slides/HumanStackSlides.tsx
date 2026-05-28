@@ -861,18 +861,37 @@ function AgentDomainsChart() {
   );
 }
 
-export function Slide1Title() {
+export function Slide1Title({
+  hideCollectiveLogo = false,
+  coverWebsiteLabel,
+  coverTitleLine1 = "Algo grande",
+  coverTitleLine2 = "está sucediendo",
+}: {
+  hideCollectiveLogo?: boolean;
+  coverWebsiteLabel?: string;
+  coverTitleLine1?: string;
+  coverTitleLine2?: string;
+} = {}) {
+  const hasCustomCoverTitle = coverTitleLine1 !== "Algo grande" || coverTitleLine2 !== "está sucediendo";
+
   return (
     <SlideFrame atmosphere="animated">
       <div className="relative flex h-full min-h-0 flex-col">
         <div className="grid min-h-0 flex-1 grid-cols-[0.95fr_1.05fr] items-center gap-16">
           <div className="space-y-10">
             <ThinRule />
-            <h1 className="text-[7rem] font-display font-semibold leading-[0.86] tracking-[-0.085em]">
-              Algo grande
-              <br />
-              <span className="text-[#00b86b]">está sucediendo</span>
-            </h1>
+            <div className="space-y-5">
+              {coverWebsiteLabel ? (
+                <p className="font-mono text-lg font-bold uppercase tracking-[0.24em] text-[#f7f8f3]/70">
+                  {coverWebsiteLabel}
+                </p>
+              ) : null}
+              <h1 className={`${hasCustomCoverTitle ? "text-[5.9rem]" : "text-[7rem]"} font-display font-semibold leading-[0.86] tracking-[-0.085em]`}>
+                {coverTitleLine1}
+                <br />
+                <span className="text-[#00b86b]">{coverTitleLine2}</span>
+              </h1>
+            </div>
             <p className="font-mono text-xl font-bold uppercase tracking-[0.22em] text-white/55">
               Javier Rivero 2026
             </p>
@@ -900,16 +919,18 @@ export function Slide1Title() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 z-20">
-          <Image
-            src="/assets/collective-logo-white.png"
-            alt="Collective"
-            width={1155}
-            height={186}
-            priority
-            className="h-auto w-[11rem] opacity-85"
-          />
-        </div>
+        {!hideCollectiveLogo ? (
+          <div className="absolute bottom-0 left-0 z-20">
+            <Image
+              src="/assets/collective-logo-white.png"
+              alt="Collective"
+              width={1155}
+              height={186}
+              priority
+              className="h-auto w-[11rem] opacity-85"
+            />
+          </div>
+        ) : null}
       </div>
     </SlideFrame>
   );
@@ -1613,12 +1634,10 @@ export function Slide7Trap({
   const [markerActive, setMarkerActive] = useState(false);
 
   useEffect(() => {
-    if (!isFalsoStackTitleRevealed) {
-      setMarkerActive(false);
-      return;
-    }
-
-    const markerTimer = window.setTimeout(() => setMarkerActive(true), 1050);
+    const markerTimer = window.setTimeout(
+      () => setMarkerActive(isFalsoStackTitleRevealed),
+      isFalsoStackTitleRevealed ? 1050 : 0
+    );
 
     return () => {
       window.clearTimeout(markerTimer);
@@ -1640,7 +1659,7 @@ export function Slide7Trap({
 
   const logos: LogoCloudItem[] = [
     { Icon: OpenaiDark, label: "OpenAI", positionClassName: "left-[10%] top-[10%]", rotateClassName: "-rotate-12", iconClassName: "h-20 w-20", tileClassName: "p-7", floatDuration: "7.5s", floatDelay: "0s", appearIndex: 0 },
-    { Icon: AnthropicWhite, label: "Anthropic", positionClassName: "left-[42%] top-[2%]", rotateClassName: "rotate-2", iconClassName: "h-20 w-20", tileClassName: "p-7", floatDuration: "8.5s", floatDelay: "-1.2s", floatVariant: "alt", appearIndex: 4 },
+    { Icon: AnthropicWhite, label: "Anthropic", positionClassName: "left-[42%] top-[12%]", rotateClassName: "rotate-2", iconClassName: "h-20 w-20", tileClassName: "p-7", floatDuration: "8.5s", floatDelay: "-1.2s", floatVariant: "alt", appearIndex: 4 },
     { Icon: ClaudeAiIcon, label: "Claude", positionClassName: "left-[36%] bottom-[18%]", rotateClassName: "-rotate-3", iconClassName: "h-20 w-20", tileClassName: "p-7", floatDuration: "8.8s", floatDelay: "-2.8s", appearIndex: 8 },
     { Icon: Gemini, label: "Gemini", positionClassName: "right-[8%] top-[8%]", rotateClassName: "rotate-12", iconClassName: "h-20 w-20", tileClassName: "p-7", floatDuration: "9s", floatDelay: "-2.4s", appearIndex: 1 },
     { Icon: MicrosoftCopilot, label: "Copilot", positionClassName: "right-[16%] top-[24%]", rotateClassName: "rotate-3", iconClassName: "h-16 w-16", tileClassName: "p-6", floatDuration: "9.2s", floatDelay: "-4s", appearIndex: 9 },
@@ -1864,7 +1883,51 @@ export function Slide8Pivot() {
   );
 }
 
-export function Slide9Curiosity() {
+const HUMAN_SKILL_BULLETS = {
+  curiosity: ["Juega y diviértete", "Prueba y descarta", "Crea el espacio de juego"],
+  initiative: ["Crea tu primer website", "Paga por un curso", "Pide ayuda"],
+  optimism: ["Busca como adoptar", "Inspírate con ideas de otros"],
+} as const;
+
+function HumanSkillBulletCard({
+  isVisible,
+  items,
+}: {
+  isVisible?: boolean;
+  items: readonly string[];
+}) {
+  return (
+    <AnimatePresence>
+      {isVisible ? (
+        <motion.div
+          initial={{ opacity: 0, x: 28, filter: "blur(10px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, x: 18, filter: "blur(10px)" }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute right-16 top-[25%] z-20 w-[34rem] rounded-[2rem] border border-white/15 bg-[#070908]/68 p-8 shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-xl"
+        >
+          <ul className="space-y-5">
+            {items.map((item) => (
+              <li
+                key={item}
+                className="flex gap-4 font-mono text-[1.35rem] font-bold leading-snug tracking-[-0.02em] text-[#f7f8f3]"
+              >
+                <span className="text-[#00b86b]">→</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  );
+}
+
+export function Slide9Curiosity({
+  isHumanSkillBulletsRevealed = false,
+}: {
+  isHumanSkillBulletsRevealed?: boolean;
+} = {}) {
   return (
     <SlideFrame tone="warm" atmosphere="flat" fullBleed>
       <div className="relative h-full w-full overflow-hidden select-none">
@@ -1888,6 +1951,11 @@ export function Slide9Curiosity() {
             }}
           />
         </div>
+
+        <HumanSkillBulletCard
+          isVisible={isHumanSkillBulletsRevealed}
+          items={HUMAN_SKILL_BULLETS.curiosity}
+        />
 
         {/* Content container */}
         <div className="relative z-10 flex h-full w-full flex-col justify-between p-16">
@@ -1924,7 +1992,11 @@ export function Slide9Curiosity() {
   );
 }
 
-export function Slide10Initiative() {
+export function Slide10Initiative({
+  isHumanSkillBulletsRevealed = false,
+}: {
+  isHumanSkillBulletsRevealed?: boolean;
+} = {}) {
   return (
     <SlideFrame tone="warm" atmosphere="flat" fullBleed>
       <div className="relative h-full w-full overflow-hidden select-none">
@@ -1948,6 +2020,11 @@ export function Slide10Initiative() {
             }}
           />
         </div>
+
+        <HumanSkillBulletCard
+          isVisible={isHumanSkillBulletsRevealed}
+          items={HUMAN_SKILL_BULLETS.initiative}
+        />
 
         {/* Content container */}
         <div className="relative z-10 flex h-full w-full flex-col justify-between p-16">
@@ -1984,7 +2061,11 @@ export function Slide10Initiative() {
   );
 }
 
-export function Slide11Optimism() {
+export function Slide11Optimism({
+  isHumanSkillBulletsRevealed = false,
+}: {
+  isHumanSkillBulletsRevealed?: boolean;
+} = {}) {
   return (
     <SlideFrame tone="warm" atmosphere="flat" fullBleed>
       <div className="relative h-full w-full overflow-hidden select-none">
@@ -2008,6 +2089,11 @@ export function Slide11Optimism() {
             }}
           />
         </div>
+
+        <HumanSkillBulletCard
+          isVisible={isHumanSkillBulletsRevealed}
+          items={HUMAN_SKILL_BULLETS.optimism}
+        />
 
         {/* Content container */}
         <div className="relative z-10 flex h-full w-full flex-col justify-between p-16">
@@ -2098,8 +2184,10 @@ export function Slide12Synthesis({
 
 export function Slide13Outro({
   isOutroCollapsed = false,
+  hideCollectiveLogo = false,
 }: {
   isOutroCollapsed?: boolean;
+  hideCollectiveLogo?: boolean;
 }) {
   return (
     <SlideFrame tone="dark" atmosphere="animated">
@@ -2152,7 +2240,9 @@ export function Slide13Outro({
                   ease: [0.16, 1, 0.3, 1]
                 } 
               }}
-              className="absolute inset-0 flex h-full min-h-0 flex-col items-center justify-between text-center px-14 py-16"
+              className={`absolute inset-0 flex h-full min-h-0 flex-col items-center text-center px-14 py-16 ${
+                hideCollectiveLogo ? "justify-center gap-10" : "justify-between"
+              }`}
             >
               {/* Top: ¡Gracias! */}
               <motion.h2 
@@ -2164,24 +2254,25 @@ export function Slide13Outro({
                 ¡Gracias!
               </motion.h2>
 
-              {/* Center: Collective Logo */}
-              <div className="flex min-h-0 flex-1 items-center justify-center px-8">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 0.95, scale: 1 }}
-                  transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full max-w-[38rem]"
-                >
-                  <Image
-                    src="/assets/collective-logo-white.png"
-                    alt="Collective"
-                    width={1155}
-                    height={186}
-                    priority
-                    className="h-auto w-full object-contain"
-                  />
-                </motion.div>
-              </div>
+              {!hideCollectiveLogo ? (
+                <div className="flex min-h-0 flex-1 items-center justify-center px-8">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 0.95, scale: 1 }}
+                    transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full max-w-[38rem]"
+                  >
+                    <Image
+                      src="/assets/collective-logo-white.png"
+                      alt="Collective"
+                      width={1155}
+                      height={186}
+                      priority
+                      className="h-auto w-full object-contain"
+                    />
+                  </motion.div>
+                </div>
+              ) : null}
 
               {/* Bottom: Name & Website */}
               <motion.div
