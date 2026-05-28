@@ -277,6 +277,24 @@ const velocityCompanyLogos: Record<
 
 const velocityCompanies = [
   {
+    name: "Cursor",
+    accent: "#2f7df0",
+    accentSoft: "rgba(47,125,240,0.22)",
+    stat: "De editor emergente a $2.1B+ ARR en menos de un ciclo presupuestal.",
+    metrics: [
+      { label: "Valoración", value: "$29.3B" },
+      { label: "Tiempo", value: "~2 años", accent: true },
+    ],
+    bars: [
+      { label: "Early '23", value: "Nace", amount: 0 },
+      { label: "2026", value: "$2.1B+ ARR", amount: 2.1, highlight: true },
+    ],
+    comparisons: [
+      { label: "The Economist", value: "$400M", amount: 0.4, years: "183 años", founded: "Fundado en 1843" },
+      { label: "FC Barcelona", value: "$1B", amount: 1, years: "127 años", founded: "Fundado en 1899" },
+    ],
+  },
+  {
     name: "OpenAI",
     accent: "#a855f7",
     accentSoft: "rgba(168,85,247,0.22)",
@@ -312,24 +330,6 @@ const velocityCompanies = [
     comparisons: [
       { label: "Hilton Hotels", value: "$11B", amount: 11, years: "105 años", founded: "Fundado en 1919" },
       { label: "Spotify", value: "$15B", amount: 15, years: "20 años", founded: "Fundado en 2006" },
-    ],
-  },
-  {
-    name: "Cursor",
-    accent: "#2f7df0",
-    accentSoft: "rgba(47,125,240,0.22)",
-    stat: "De editor emergente a $2.1B+ ARR en menos de un ciclo presupuestal.",
-    metrics: [
-      { label: "Valoración", value: "$29.3B" },
-      { label: "Tiempo", value: "~2 años", accent: true },
-    ],
-    bars: [
-      { label: "Early '23", value: "Nace", amount: 0 },
-      { label: "2026", value: "$2.1B+ ARR", amount: 2.1, highlight: true },
-    ],
-    comparisons: [
-      { label: "The Economist", value: "$400M", amount: 0.4, years: "183 años", founded: "Fundado en 1843" },
-      { label: "FC Barcelona", value: "$1B", amount: 1, years: "127 años", founded: "Fundado en 1899" },
     ],
   },
 ];
