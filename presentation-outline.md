@@ -89,9 +89,9 @@ Instead of dictating strict layouts, this brief gives the designer the emotional
 
 | Click       | Company       | What appears                                                                                     |
 | ----------- | ------------- | ------------------------------------------------------------------------------------------------ |
-| 1 (initial) | **OpenAI**    | Growth chart #1 — revenue, users, or API volume over time. Steep exponential curve.              |
-| 2           | **Anthropic** | Growth chart #2 — same metric style as OpenAI for visual consistency. Equally vertical.          |
-| 3           | **Cursor**    | Growth chart #3 — adoption / ARR / developer growth. The steepest or most dramatic of the three. |
+| 1 (initial) | **Cursor**    | Growth chart #1 — adoption / ARR / developer growth. The steepest or most dramatic of the three. |
+| 2           | **OpenAI**    | Growth chart #2 — revenue, users, or API volume over time. Steep exponential curve.              |
+| 3           | **Anthropic** | Growth chart #3 — same metric style as OpenAI for visual consistency. Equally vertical.          |
 
 
 **Visual Concept & Metaphor:** A single, full-bleed data canvas. One hero chart at a time—large, cinematic, impossible to ignore. Each chart should share the same layout language (axes, typography, color accent) so the comparison lands instantly; only the company name and data change on click.

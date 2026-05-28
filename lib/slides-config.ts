@@ -99,7 +99,7 @@ export const SLIDES_CONFIG: SlideConfig[] = [
     title: "Realidad exponencial",
     subtitle: "Sección 05",
     notes: [
-      "Usa los botones en la diapositiva para moverte entre OpenAI, Anthropic y Cursor.",
+      "Usa los botones en la diapositiva para moverte entre Cursor, OpenAI y Anthropic.",
       "Cada pulso debe crear la misma sensación: esto ya se volvió vertical.",
       "Reemplaza el texto temporal/estadístico con datos públicos reales cuando los tengas.",
     ],
