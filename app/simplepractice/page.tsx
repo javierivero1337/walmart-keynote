@@ -4,6 +4,10 @@ import {
   SIMPLEPRACTICE_SLIDES_CONFIG,
 } from "@/lib/simplepractice-slides-config";
 
+export const metadata = {
+  title: "SimplePractice Keynote",
+};
+
 export default function SimplePracticePage() {
   return (
     <main className="h-dvh w-full overflow-hidden bg-pitch-black text-[#0a0f0c]">
